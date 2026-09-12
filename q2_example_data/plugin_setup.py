@@ -1,9 +1,9 @@
 """QIIME 2 plugin registration for example-data."""
 
-from qiime2.plugin import Plugin
 from q2_types.metadata import ImmutableMetadata
 from q2_types.per_sample_sequences import PairedEndSequencesWithQuality
 from q2_types.sample_data import SampleData
+from qiime2.plugin import Plugin
 
 from q2_example_data import __version__
 from q2_example_data.actions import (

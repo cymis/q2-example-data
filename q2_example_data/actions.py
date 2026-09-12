@@ -6,13 +6,13 @@ from tempfile import TemporaryDirectory
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
-from qiime2 import Artifact, Metadata
-from qiime2.metadata import MetadataFileError
 from q2_types.per_sample_sequences import (
     PairedEndSequencesWithQuality,
     SingleLanePerSamplePairedEndFastqDirFmt,
 )
 from q2_types.sample_data import SampleData
+from qiime2 import Artifact, Metadata
+from qiime2.metadata import MetadataFileError
 
 from q2_example_data import __version__
 

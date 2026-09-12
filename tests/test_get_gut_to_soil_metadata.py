@@ -71,9 +71,11 @@ def test_registered_method_returns_immutable_metadata_artifact():
 def test_get_gut_to_soil_metadata_rejects_changed_content():
     payload = _metadata_payload()
 
-    with patch.object(actions, "urlopen", return_value=_mock_response(payload)):
-        with pytest.raises(RuntimeError, match="checksum did not match"):
-            actions.get_gut_to_soil_metadata()
+    with (
+        patch.object(actions, "urlopen", return_value=_mock_response(payload)),
+        pytest.raises(RuntimeError, match="checksum did not match"),
+    ):
+        actions.get_gut_to_soil_metadata()
 
 
 def test_get_gut_to_soil_metadata_reports_network_failure():
@@ -81,6 +83,5 @@ def test_get_gut_to_soil_metadata_reports_network_failure():
         actions,
         "urlopen",
         side_effect=URLError("offline"),
-    ):
-        with pytest.raises(RuntimeError, match="Failed to download"):
-            actions.get_gut_to_soil_metadata()
+    ), pytest.raises(RuntimeError, match="Failed to download"):
+        actions.get_gut_to_soil_metadata()
