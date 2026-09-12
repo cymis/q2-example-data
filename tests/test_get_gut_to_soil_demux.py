@@ -6,12 +6,12 @@ from unittest.mock import MagicMock, patch
 from urllib.error import URLError
 
 import pytest
-from qiime2 import Artifact
 from q2_types.per_sample_sequences import (
     PairedEndSequencesWithQuality,
     SingleLanePerSamplePairedEndFastqDirFmt,
 )
 from q2_types.sample_data import SampleData
+from qiime2 import Artifact
 
 from q2_example_data import actions
 
@@ -81,12 +81,16 @@ def test_registered_method_returns_paired_end_artifact(archive_payload):
 
 
 def test_get_gut_to_soil_demux_rejects_changed_content(archive_payload):
-    with patch.object(actions, "urlopen", return_value=_mock_response(archive_payload)):
-        with pytest.raises(RuntimeError, match="checksum did not match"):
-            actions.get_gut_to_soil_demux()
+    with (
+        patch.object(actions, "urlopen", return_value=_mock_response(archive_payload)),
+        pytest.raises(RuntimeError, match="checksum did not match"),
+    ):
+        actions.get_gut_to_soil_demux()
 
 
 def test_get_gut_to_soil_demux_reports_network_failure():
-    with patch.object(actions, "urlopen", side_effect=URLError("offline")):
-        with pytest.raises(RuntimeError, match="Failed to download"):
-            actions.get_gut_to_soil_demux()
+    with (
+        patch.object(actions, "urlopen", side_effect=URLError("offline")),
+        pytest.raises(RuntimeError, match="Failed to download"),
+    ):
+        actions.get_gut_to_soil_demux()

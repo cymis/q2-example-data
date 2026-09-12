@@ -26,24 +26,21 @@ reuse standard QIIME 2 types such as `SampleData[SequencesWithQuality]`,
 
 ## Development environment
 
-Create the QIIME environment, then install this checkout into that environment.
+Run the test suite inside the same QIIME 2 base container used for publishing.
 
 ```bash
-conda env create -f environment-files/q2-example-data-tiny-dev.yml
-conda activate q2-example-data-tiny-stable-dev
-python -m pip install -e . --no-deps --no-build-isolation
-python -m pytest
+docker run --rm -v "$PWD:/work" -w /work quay.io/qiime2/tiny:2026.7 \
+  bash -lc 'conda run -n rachis-tiny-2026.7 python -m pip install pytest ruff && \
+  conda run -n rachis-tiny-2026.7 python -m pip install -e . --no-deps --no-build-isolation && \
+  conda run -n rachis-tiny-2026.7 python -m pytest && \
+  conda run -n rachis-tiny-2026.7 ruff check .'
 ```
-
-Configured local runtime hint: `conda activate qiime2-tiny-2026.1`.
-
-The MCP server itself uses uv; plugin runtime checks intentionally execute with the conda environment's Python.
 
 ## Current status
 
 - Modern `pyproject.toml` packaging with a `qiime2.plugins` entry point
 - Versioning through `versioningit`, with a source-tree fallback version
-- Development and release conda environment definitions
+- Reproducible development and release container based on QIIME 2 2026.7
 - Pytest, Ruff, Pyright, coverage, nox, and GitHub Actions scaffolding
 - Two fixed, checksum-verified Gut-to-Soil source actions
 - No custom transformers or new semantic types
