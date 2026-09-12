@@ -1,0 +1,7 @@
+name: q2-example-data-tiny-stable-release
+channels:
+  - https://packages.qiime2.org/qiime2/stable/tiny/released
+  - conda-forge
+  - bioconda
+dependencies:
+  - qiime2-tiny
